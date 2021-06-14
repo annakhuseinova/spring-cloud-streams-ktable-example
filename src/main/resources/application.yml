@@ -1,0 +1,20 @@
+spring:
+  cloud:
+    stream:
+      bindings:
+        stock-input-channel:
+          destination: stock-tick-topic
+      kafka:
+        streams:
+          binder:
+            brokers: localhost:9092
+            configuration:
+              # the frequency with which to save the position (offsets in source topics)
+              commit.interval.ms: 10000 # the default is 30000 ms
+              # here we specify the location of the RocksDB
+              state.dir: state-store
+          bindings:
+            stock-input-channel:
+              consumer:
+                # the incoming messages must be materialized in the specified KTable (like a table in a db)
+                materializedAs: stock-input-store
